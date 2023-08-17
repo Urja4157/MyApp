@@ -16,8 +16,4 @@
     <ProjectReference Include="..\MyApp.Models\MyApp.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
-
 </Project>
