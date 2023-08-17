@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using MyAppWeb.Data;
-using MyAppWeb.Models;
+using MyApp.DataAccessLayer;
+using MyApp.Models;
 
 namespace MyAppWeb.Controllers
 {
