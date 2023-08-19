@@ -9,13 +9,13 @@
         <div asp-validation-summary=All></div>
         <div class="row mb-3">
             <label asp-for="Product.Name"></label>
-            <textarea asp-for="Product.Name" class="form-control" ></textarea>
+            <input asp-for="Product.Name" class="form-control" >
             <span asp-validation-for="Product.Name" class="text-danger"></span>
         </div>
         <div class="row mb-3">
             <label asp-for="Product.Description"></label>
-            <input asp-for="Product.Description" class="form-control" />
-            <span asp-validation-for="Product.Description  " class="text-danger"></span>
+            <textarea asp-for="Product.Description" class="form-control" ></textarea>
+            <span asp-validation-for="Product.Description" class="text-danger"></span>
          </div>
         <div class="row mb-3">
             <label asp-for="Product.Price"></label>
@@ -23,11 +23,16 @@
             <span asp-validation-for="Product.Price" class="text-danger"></span>
         </div>
         <div class="row mb-3">
-            <label asp-for="Product.Price"></label>
-            <input type="file" asp-for="Product.Price" class="form-control" />
-            <span asp-validation-for="Product.Price" class="text-danger"></span>
+            <label asp-for="Product.ImageUrl"></label>
+            <input type="file" name="file" class="form-select" />
         </div>
-
+        <div class="row mb-3">
+            <label asp-for="Product.CategoryId"></label>
+            <select asp-for="Product.CategoryId" asp-items="@Model.Categories" class="form-control">
+                <option selected disabled>--Select Category--</option>
+             </select>
+            <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+        </div>
 
         
         @if(Model.Product==null || Model.Product.Id==0)

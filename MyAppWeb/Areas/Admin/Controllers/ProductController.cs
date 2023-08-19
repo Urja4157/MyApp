@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MyApp.DataAccessLayer;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
@@ -44,10 +45,10 @@ namespace MyAppWeb.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateUpdate(int? id)
         {
-            ProductVM vm = new ProductVM
+            ProductVM vm = new ProductVM()
             {
                 Product = new(),
-                Categories=_unitOfWork.Category.GetAll().Select(x=>new System.Web.Mvc.SelectListItem()
+                Categories = _unitOfWork.Category.GetAll().Select(x=>new SelectListItem()
                 {
                     Text=x.Name,
                     Value=x.Id.ToString()
