@@ -1,0 +1,52 @@
+﻿@model MyApp.Models.ViewModels.ProductVM
+<form method="post" asp-action="CreateUpdate" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Product.Id" />
+    <div class="border p-3 mt-4">
+        <div class="row pb-3">
+            <h2 class="text-primary">@((Model.Product==null || Model.Product.Id==0) ?"Create":"Update") Product</h2>
+            <hr />
+        </div>
+        <div asp-validation-summary=All></div>
+        <div class="row mb-3">
+            <label asp-for="Product.Name"></label>
+            <textarea asp-for="Product.Name" class="form-control" ></textarea>
+            <span asp-validation-for="Product.Name" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.Description"></label>
+            <input asp-for="Product.Description" class="form-control" />
+            <span asp-validation-for="Product.Description  " class="text-danger"></span>
+         </div>
+        <div class="row mb-3">
+            <label asp-for="Product.Price"></label>
+            <input asp-for="Product.Price" class="form-control" />
+            <span asp-validation-for="Product.Price" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.Price"></label>
+            <input type="file" asp-for="Product.Price" class="form-control" />
+            <span asp-validation-for="Product.Price" class="text-danger"></span>
+        </div>
+
+
+        
+        @if(Model.Product==null || Model.Product.Id==0)
+        {
+            <button class="btn btn-primary" type="Submit">Create</button>
+        }
+        else
+        {
+             <button class="btn btn-primary" type="Submit">Update</button>
+        }
+
+
+    </div>
+    <a asp-action="Index" asp-controller="category">Back to List</a>
+
+</form>
+
+@section scripts{
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}

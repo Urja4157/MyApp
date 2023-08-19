@@ -44,7 +44,16 @@ namespace MyAppWeb.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateUpdate(int? id)
         {
-            CategoryVM vm = new CategoryVM();
+            ProductVM vm = new ProductVM
+            {
+                Product = new(),
+                Categories=_unitOfWork.Category.GetAll().Select(x=>new System.Web.Mvc.SelectListItem()
+                {
+                    Text=x.Name,
+                    Value=x.Id.ToString()
+
+                })
+            };
             if (id == null || id == 0)
             {
 
@@ -52,8 +61,8 @@ namespace MyAppWeb.Areas.Admin.Controllers
             }
             else
             {
-                vm.Category = _unitOfWork.Category.GetT(x => x.Id == id);
-                if (vm.Category == null)
+                vm.Product = _unitOfWork.Product.GetT(x => x.Id == id);
+                if (vm.Product == null)
                 {
                     return NotFound();
                 }
