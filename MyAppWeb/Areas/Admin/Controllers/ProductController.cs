@@ -130,33 +130,46 @@ namespace MyAppWeb.Areas.Admin.Controllers
             }
             return RedirectToAction("Index");
         }
-        [HttpGet]
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (id == null || id == 0)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var category = _unitOfWork.Category.GetT(x => x.Id == id);
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(category);
+        //}
+
+
+        #region DeleteAPICALL
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id == null || id == 0)
+            var product = _unitOfWork.Product.GetT(x => x.Id == id);
+            if (product == null)
             {
-                return NotFound();
+                return Json(new {success=false,message="Error in fetching data"});
             }
-            var category = _unitOfWork.Category.GetT(x => x.Id == id);
-            if (category == null)
+            else
             {
-                return NotFound();
+                var oldImagePath = Path.Combine(_hostingEnvironment.WebRootPath, product.ImageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+                _unitOfWork.Product.Delete(product);
+                _unitOfWork.Save();
+                return Json(new { success = true, message = "Product successfully deleted" });
+
             }
-            return View(category);
+            
+            
         }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteData(int? id)
-        {
-            var category = _unitOfWork.Category.GetT(x => x.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.Category.Delete(category);
-            _unitOfWork.Save();
-            TempData["success"] = "Category Deleted Done";
-            return RedirectToAction("Index");
-        }
+        #endregion
     }
 }
