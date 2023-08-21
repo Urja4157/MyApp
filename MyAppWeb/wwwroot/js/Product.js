@@ -11,6 +11,19 @@ $(document).ready(function () {
             { "data": "price" },
             //{"data": "imageUrl"},
             {"data": "category.name"},
+            {
+                "data": "id",
+                "render":function(data){
+                    return `
+                       
+<a href="/Admin/Product/CreateUpdate?id=${data}"><i class="bi bi-pencil-square"></i></a>
+
+                <a asp-action="Delete" asp-controller="category" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+                    `
+                            
+                    
+                }
+            }
         ]
     });
 });
