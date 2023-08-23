@@ -1,4 +1,4 @@
-﻿@model MyApp.Models.ViewModels.Cart
+﻿@model MyApp.Models.Cart
 <h1>Product Details</h1>
 <form method="post">
     <div class="row">
@@ -10,17 +10,27 @@
                 <label asp-for="Product.Name">Product.Name: @Model.Product.Name</label>
                 <label asp-for="Product.Description">Product Description: @Model.Product.Description</label>
                 <label asp-for="Product.Price">Product Price: @Model.Product.Price.ToString("0.00")</label>
-               @if (Model.Product != null)
-{
-    @if (Model.Product.Category != null)
-    {
-        <label asp-for="Product.Category.Id">Product Category: @Model.Product.Category.Name</label>
-    }
-    else
-    {
-        <p>No category available for this product.</p>
-    }
-}
+               
+                    @if (Model.Product.Category != null)
+                    {
+                        <label asp-for="Product.Category.Id">Product Category: @Model.Product.Category.Name</label>
+                    }
+                    else
+                    {
+                        <p>No category available for this product.</p>
+                    }
+                <div class="form-control">
+                    
+                    <label asp-for="Count"></label>
+                    <input asp-for="Count" class="form-control" />
+                    <span asp-validation-for="Count" class="text-danger"></span>
+        
+                </div>
+                <div class="form-control">
+                   <button class="btn btn-success" asp-action="Index" asp-controller="Home">Back to list</button>
+                   <button class="btn btn-dark" asp-action="Index">Add to Cart</button>
+        
+                </div>
             </div>
         </div>
     </div>

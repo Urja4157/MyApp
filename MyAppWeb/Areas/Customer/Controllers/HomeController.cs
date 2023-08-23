@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
-using MyApp.Models.ViewModels;
 using System.Diagnostics;
 
 namespace MyAppWeb.Areas.Customer.Controllers
