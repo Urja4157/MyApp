@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace MyAppWeb.Areas.Customer.Controllers
 {
@@ -25,15 +27,16 @@ namespace MyAppWeb.Areas.Customer.Controllers
         }
         [HttpGet]
 
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? ProductId)
         {
-            Product product = _unitOfWork.Product.GetT(x => x.Id == id);
+            Product product = _unitOfWork.Product.GetT(x => x.Id == ProductId);
             
                 product.Category = _unitOfWork.Category.GetT(c => c.Id == product.CategoryId);
                 Cart cart = new Cart()
                 {
                     Product = product,
-                    Count = 1
+                    Count = 1,
+                    ProductId= (int)ProductId
                 };
                 return View(cart);
             
@@ -45,6 +48,39 @@ namespace MyAppWeb.Areas.Customer.Controllers
 
             //};
             //return View(cart);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+
+        public IActionResult Details(Cart cart)
+        {
+            if (ModelState.IsValid)
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            cart.ApplicationUserId = claims.Value;
+
+            var cartItem = _unitOfWork.Cart.GetT(x => x.ProductId == cart.ProductId && x.ApplicationUserId == claims.Value);
+            if (cartItem == null)
+            {
+                    _unitOfWork.Cart.Add(cart);
+                }
+                else
+                {
+                    _unitOfWork.Cart.IncrementCartItem(cartItem, cart.Count);
+                }
+                    _unitOfWork.Save();
+
+
+
+            }
+
+
+            return RedirectToAction("Index");
+            
+            
 
         }
 

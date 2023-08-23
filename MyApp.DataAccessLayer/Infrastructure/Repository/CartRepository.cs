@@ -16,6 +16,10 @@ namespace MyApp.DataAccessLayer.Infrastructure.Repository
             _context = context;
         }
 
-        
+        public int IncrementCartItem(Cart cart, int count)
+        {
+            cart.Count+=count;
+            return cart.Count;
+        }
     }
 }
