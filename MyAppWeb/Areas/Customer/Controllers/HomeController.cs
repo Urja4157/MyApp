@@ -29,25 +29,24 @@ namespace MyAppWeb.Areas.Customer.Controllers
 
         public IActionResult Details(int? ProductId)
         {
-            Product product = _unitOfWork.Product.GetT(x => x.Id == ProductId);
-            
-                product.Category = _unitOfWork.Category.GetT(c => c.Id == product.CategoryId);
-                Cart cart = new Cart()
-                {
-                    Product = product,
-                    Count = 1,
-                    ProductId= (int)ProductId
-                };
-                return View(cart);
-            
+            //Product product = _unitOfWork.Product.GetT(x => x.Id == ProductId, includeProperties: "Category");
+
+            ////product.Category = _unitOfWork.Category.GetT(c => c.Id == product.CategoryId);
             //Cart cart = new Cart()
             //{
-            //    Product = _unitOfWork.Product.GetT(x => x.Id == id, includeProperties: "Category"),
-            //    Count = 1
-
-
+            //    Product = product,
+            //    Count = 1,
+            //    ProductId = (int)ProductId
             //};
             //return View(cart);
+            Cart cart = new Cart()
+            {
+                Product = _unitOfWork.Product.GetT(x => x.Id == ProductId, includeProperties: "Category"),
+                Count = 1,
+                ProductId = (int)ProductId
+            };
+            return View(cart);
+            
 
         }
         [HttpPost]
