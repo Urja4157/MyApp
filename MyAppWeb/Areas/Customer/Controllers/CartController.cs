@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyApp.CommonHelper;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
+using MyApp.Models;
 using MyApp.Models.ViewModels;
 using System.Security.Claims;
 
@@ -44,13 +46,7 @@ namespace MyAppWeb.Areas.Customer.Controllers
 
 
             };
-            //var user = new MyApp.Models.ApplicationUser
-            //{
-            //    Id = claims.Value, // Assuming claims.Value is the user's ID
-            //                       // Set other properties of the user as needed
-                
-            //};
-            //vm.OrderHeader.ApplicationUser = user;
+            
             vm.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.GetT(x => x.Id == claims.Value);
             vm.OrderHeader.Name = vm.OrderHeader.ApplicationUser.Name;
             vm.OrderHeader.Phone = vm.OrderHeader.ApplicationUser.PhoneNumber;
@@ -65,6 +61,41 @@ namespace MyAppWeb.Areas.Customer.Controllers
                 vm.OrderHeader.OrderTotal += (item.Product.Price * item.Count);
             }
             return View(vm);
+        }
+        [HttpPost]
+        public IActionResult Summary(CartVM vm)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            vm.ListOfCart = _unitOfWork.Cart.GetAll(x => x.ApplicationUserId == claims.Value, includeProperties: "Product");
+            vm.OrderHeader.OrderStatus = OrderStatus.StatusPending;
+            vm.OrderHeader.PaymentStatus = PaymentStatus.StatusPending;
+            vm.OrderHeader.DateOfOrder = DateTime.Now;
+            vm.OrderHeader.ApplicationUserId = claims.Value;
+            
+            foreach (var item in vm.ListOfCart)
+            {
+                vm.OrderHeader.OrderTotal += (item.Product.Price * item.Count);
+            }
+            _unitOfWork.OrderHeader.Add(vm.OrderHeader);
+            _unitOfWork.Save();
+            foreach (var item in vm.ListOfCart)
+            {
+                OrderDetail orderDetail = new OrderDetail()
+                {
+                    ProductId = item.ProductId,
+                    OrderHeaderId = vm.OrderHeader.Id,
+                    Count = item.Count,
+                    Price = item.Product.Price
+                };
+                _unitOfWork.OrderDetail.Add(orderDetail);
+                _unitOfWork.Save();
+            }
+            _unitOfWork.Cart.DeleteRange(vm.ListOfCart);
+            _unitOfWork.Save();
+            return RedirectToAction("Index","Home");
+
         }
         public IActionResult plus(int id)
         {
