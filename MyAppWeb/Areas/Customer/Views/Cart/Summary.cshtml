@@ -1,4 +1,6 @@
 ﻿@model MyApp.Models.ViewModels.CartVM
+@using Microsoft.Extensions.Options
+@inject IOptions<MyApp.CommonHelper.StripeSettings> Stripe
 <form method="post">
     <div class="py-5 text-center">
         <h2>Checkout form</h2>
