@@ -60,7 +60,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
                 OrderHeader = _unitOfWork.OrderHeader.GetT(x => x.Id == id, includeProperties: "ApplicationUser"),
                 OrderDetail = _unitOfWork.OrderDetail.GetAll(x => x.Id == id, includeProperties: "Product")
             };
-            return View(); 
+            return View(orderVM); 
         }
     }
 }
