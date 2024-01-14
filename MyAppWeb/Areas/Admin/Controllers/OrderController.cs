@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyApp.CommonHelper;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
+using MyApp.Models.ViewModels;
 using System.Security.Claims;
 
 namespace MyAppWeb.Areas.Admin.Controllers
@@ -12,11 +13,11 @@ namespace MyAppWeb.Areas.Admin.Controllers
     public class OrderController : Controller
     {
 
-        private IUnitOfWork unitOfWork;
+        private IUnitOfWork _unitOfWork;
 
         public OrderController(IUnitOfWork unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
         #region APICALL
         public IActionResult AllOrders(string status)
@@ -24,13 +25,13 @@ namespace MyAppWeb.Areas.Admin.Controllers
             IEnumerable<OrderHeader> orderHeader;
             if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
-                orderHeader = unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
+                orderHeader = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
             }
             else
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-                orderHeader = unitOfWork.OrderHeader.GetAll(x => x.ApplicationUserId == claims.Value);
+                orderHeader = _unitOfWork.OrderHeader.GetAll(x => x.ApplicationUserId == claims.Value);
             }
             switch (status)
             {
@@ -52,8 +53,13 @@ namespace MyAppWeb.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult OrderDetails(string id) 
-        { 
+        public IActionResult OrderDetails(int id) 
+        {
+            OrderVM orderVM = new OrderVM()
+            {
+                OrderHeader = _unitOfWork.OrderHeader.GetT(x => x.Id == id, includeProperties: "ApplicationUser"),
+                OrderDetail = _unitOfWork.OrderDetail.GetAll(x => x.Id == id, includeProperties: "Product")
+            };
             return View(); 
         }
     }
