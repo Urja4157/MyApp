@@ -1,0 +1,285 @@
+﻿@model MyApp.Models.ViewModels.OrderVM
+@using MyApp.CommonHelper
+<form method="post">
+    <input type="hidden" asp-for="OrderHeader.Id" />
+    <div class="row">
+        <div class="col-md-6">
+
+            <h1>Pickup Details</h1>
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.Name">Name</label>
+                    <input asp-for="OrderHeader.Name" class="form-control">
+                    <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.Name">Name</label>
+                    <input asp-for="OrderHeader.Name" readonly class="form-control">
+                </div>
+            }
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.Address">Address</label>
+                    <input asp-for="OrderHeader.Address" class="form-control">
+                    <span asp-validation-for="OrderHeader.Address" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.Address">Address</label>
+                    <input asp-for="OrderHeader.Address" readonly class="form-control">
+                </div>
+            }
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.Phone">Phone</label>
+                    <input asp-for="OrderHeader.Phone" class="form-control">
+                    <span asp-validation-for="OrderHeader.Phone" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.Phone">Phone</label>
+                    <input asp-for="OrderHeader.Phone" readonly class="form-control">
+                </div>
+            }
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.Carrier">Carrier</label>
+                    <input asp-for="OrderHeader.Carrier" class="form-control">
+                </div>
+            }
+            else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.Carrier">Carrier</label>
+                    <input asp-for="OrderHeader.Carrier" readonly class="form-control">
+                </div>
+            }
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.City">City</label>
+                    <input asp-for="OrderHeader.City" class="form-control">
+                    <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.City">City</label>
+                    <input asp-for="OrderHeader.City" readonly class="form-control">
+                </div>
+            }
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.State">State</label>
+                    <input asp-for="OrderHeader.State" class="form-control">
+                    <span asp-validation-for="OrderHeader.State" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.State">State</label>
+                    <input asp-for="OrderHeader.State" readonly class="form-control">
+                </div>
+            }
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.PostalCode">PostalCode</label>
+                    <input asp-for="OrderHeader.PostalCode" class="form-control">
+                    <span asp-validation-for="OrderHeader.PostalCode" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.PostalCode">PostalCode</label>
+                    <input asp-for="OrderHeader.PostalCode" readonly class="form-control">
+                </div>
+            }
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.TrackingNumber">Tracking</label>
+                    <input asp-for="OrderHeader.TrackingNumber" class="form-control">
+                    <span asp-validation-for="OrderHeader.TrackingNumber" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.TrackingNumber">TrackingNumber</label>
+                    <input asp-for="OrderHeader.TrackingNumber" readonly class="form-control">
+                </div>
+            }
+
+            <div class="row mb-3">
+                <label asp-for="OrderHeader.ApplicationUser.Email">Email</label>
+                <input readonly asp-for="OrderHeader.ApplicationUser.Email" class="form-control">
+                <span asp-validation-for="OrderHeader.ApplicationUser.Email" class="text-danger"></span>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="OrderHeader.DateOfOrder">DateOfOrder</label>
+                <input readonly value="@Model.OrderHeader.DateOfOrder.ToShortDateString()" class="form-control">
+                <span asp-validation-for="OrderHeader.DateOfOrder" class="text-danger"></span>
+            </div>
+            <div class="row mb-3">
+                <label asp-for="OrderHeader.DateOfShipping">DateOfShipping</label>
+                <input readonly value="@Model.OrderHeader.DateOfShipping.ToShortDateString()" class="form-control">
+                <span asp-validation-for="OrderHeader.DateOfShipping" class="text-danger"></span>
+            </div>
+            @if (Model.OrderHeader.SessionId != null)
+            {
+                <div class="row mb-3">
+
+                    <label asp-for="OrderHeader.DateOfPayment">DateOfPayment</label>
+                    <input readonly value="@Model.OrderHeader.DateOfPayment.ToShortDateString()" class="form-control">
+                    <span asp-validation-for="OrderHeader.DateOfPayment" class="text-danger"></span>
+                </div>
+            }
+            @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.SessionId">SessionId</label>
+                    <input asp-for="OrderHeader.SessionId" class="form-control">
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.PaymentIntentId">PaymentIntentId</label>
+                    <input asp-for="OrderHeader.PaymentIntentId" readonly class="form-control">
+                </div>
+            }
+            <!--else
+            {
+                <div class="row mb-3">
+                    <label asp-for="OrderHeader.SessionId">SessionId</label>
+                    <input asp-for="OrderHeader.SessionId" readonly class="form-control">
+                </div>-->
+                @*<div class="row mb-3">
+                    <label asp-for="OrderHeader.PaymentIntentId">PaymentIntentId</label>
+                    <input asp-for="OrderHeader.PaymentIntentId" readonly class="form-control">
+                </div>*@
+            <!--}-->
+            <div class="row mb-3">
+                <label asp-for="OrderHeader.PaymentStatus">PaymentStatus</label>
+                <input asp-for="OrderHeader.PaymentStatus" readonly class="form-control">
+            </div>
+
+
+            <div class="row mb-3">
+                <button type="submit" class="btn-primary">Update Order</button>
+            </div>
+
+
+
+            @*  @if(Model.Product==null || Model.Product.Id==0)
+                {
+                <button class="btn btn-primary" onclick="return ValidateEmpty()" type="Submit">Create</button>
+                }
+                else
+                {
+                <button class="btn btn-primary" type="Submit">Update</button>
+                }
+            *@
+
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Order Summary - @Model.OrderHeader.OrderStatus</h5>
+
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var item in Model.OrderDetail)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                <span>@item.Product.Name</span>
+                                <span>QTY: @item.Count</span>
+                                <span>Price: @item.Price</span>
+                                <div class="text-end">@((item.Count*item.Price).ToString("c")) </div>
+                            </li>
+                        }
+                        <li class="list-group-item">
+                            <div>
+                                <strong>Total Amount &nbsp;<span class="text-end">@Model.OrderHeader.OrderTotal.ToString("c")</span></strong>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+                @*<div id="orderDetails">
+                        <p>Order ID: <span id="orderId">12345</span></p>
+                        <p>Order Total: $<span id="orderTotal">100.00</span></p>
+                        <p>Status: <span id="orderStatus">Pending</span></p>
+                    </div>*@
+                <div>
+                    @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+                    {
+                        if (Model.OrderHeader.OrderStatus == OrderStatus.StatusApproved)
+                        {
+                            <button asp-action="InProcess" type="submit" class="form-control" style="background-color: #008CBA">Start Processing</button><br />
+
+                        }
+                        if (Model.OrderHeader.OrderStatus == OrderStatus.StatusInProcess)
+                        {
+                            <button asp-action="Shipped" type="submit" class="form-control" onclick="return ValidateEmpty()" style="background-color: #4CAF50">Ship Order</button><br />
+
+
+                        }
+                        if (Model.OrderHeader.OrderStatus != OrderStatus.StatusRefund && Model.OrderHeader.OrderStatus != OrderStatus.StatusCancelled)
+                        {
+                            <button asp-action="CancelOrder" type="submit" class="form-control" style="background-color: #f44336">Cancel Order</button>
+
+                        }
+
+                    }
+                </div>
+               
+                <a asp-action="Index" asp-controller="product">Back to List</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+
+        function ValidateEmpty() {
+            if (document.getElementById("OrderHeader_Carrier").value == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Upload Image',
+                });
+                return false;
+            }
+            if (document.getElementById("OrderHeader_TrackingNumber").value == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Upload Image',
+                });
+                return false;
+            }
+            return true;
+    }
+        </script>
+}

@@ -2,12 +2,40 @@
 /*let dtable = new DataTable('#myTable');*/
 $(document).ready(function () {
     var url = window.location.search;
+    //var orderType = "all"; // Default value
+    //console.log("URL:", url); // Log the URL for debugging
+    //if (url.includes("pending")) {
+    //    orderType = "pending";
+    //} else if (url.includes("approved")) {
+    //    orderType = "approved";
+    //} else if (url.includes("shipped")) {
+    //    orderType = "shipped";
+    //} else if (url.includes("underprocess")) {
+    //    orderType = "underprocess";
+    //}
+    //console.log("Order Type:", orderType); // Log the detected order type for debugging
+    //OrderTable(orderType);
+
+
     if (url.includes("pending")) {
-        OrderTable("pending")
+        OrderTable("pending");
     }
     else {
         if (url.includes("approved")) {
-            OrderTable("approved")
+            OrderTable("approved");
+        }
+        else {
+            if (url.includes("shipped")) {
+                OrderTable("shipped");
+            }
+            else {
+                if (url.includes("underprocess")) {
+                    OrderTable("underprocess");
+                }
+                else {
+                    OrderTable("all");
+                }
+            }
         }
     }
 });

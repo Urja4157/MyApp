@@ -16,15 +16,25 @@ namespace MyApp.Models
         public ApplicationUser ApplicationUser { get; set; }
         [Required]
         public DateTime DateOfOrder { get; set; }
+
         public DateTime DateOfShipping { get; set; }
+
         public double OrderTotal { get; set; }
+
         public string? OrderStatus { get; set; }
+
         public string? PaymentStatus { get; set; }
+
         public string? TrackingNumber { get; set; }
+
         public string? Carrier { get; set; }
+
         public string? SessionId { get; set; }
+
         public string? PaymentIntentId { get; set; }
+
         public DateTime DateOfPayment { get; set; }
+
         public DateTime DueDate { get; set; }
         [Required]
         public string Phone { get; set; }

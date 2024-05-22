@@ -124,6 +124,16 @@ namespace MyAppWeb.Areas.Customer.Controllers
 
             var service = new SessionService();
             Session session = service.Create(options);
+
+            //if (session.PaymentIntentId != null)
+            //{
+            //    // Update the OrderHeader with PaymentIntentId
+            //    vm.OrderHeader.PaymentIntentId = session.PaymentIntentId;
+            //    _unitOfWork.OrderHeader.Update(vm.OrderHeader);
+            //    _unitOfWork.Save();
+            //}
+
+
             _unitOfWork.OrderHeader.PaymentStatus(vm.OrderHeader.Id, session.Id, session.PaymentIntentId);
             _unitOfWork.Save();
 
@@ -147,6 +157,7 @@ namespace MyAppWeb.Areas.Customer.Controllers
             Session session = service.Get(orderHeader.SessionId);
             if (session.PaymentStatus.ToLower() == "paid")
             {
+                orderHeader.PaymentIntentId = session.PaymentIntentId;
                 _unitOfWork.OrderHeader.UpdateStatus(id,OrderStatus.StatusApproved,PaymentStatus.StatusApproved);
             }
             List<Cart> cart = _unitOfWork.Cart.GetAll(x=>x.ApplicationUserId==orderHeader.ApplicationUserId).ToList();
