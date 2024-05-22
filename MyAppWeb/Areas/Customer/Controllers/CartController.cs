@@ -179,6 +179,8 @@ namespace MyAppWeb.Areas.Customer.Controllers
             if (cart.Count <= 1)
             {
                 _unitOfWork.Cart.Delete(cart);
+                var count = _unitOfWork.Cart.GetAll(x => x.ApplicationUserId == cart.ApplicationUserId).ToList().Count-1;
+                HttpContext.Session.SetInt32("SessionCart", count);
 
             }
             else
@@ -194,6 +196,8 @@ namespace MyAppWeb.Areas.Customer.Controllers
             var cart = _unitOfWork.Cart.GetT(x => x.Id == id);
             _unitOfWork.Cart.Delete(cart);
             _unitOfWork.Save();
+            var count = _unitOfWork.Cart.GetAll(x=>x.ApplicationUserId==cart.ApplicationUserId).ToList().Count();
+            HttpContext.Session.SetInt32("SessionCart", count);
             return RedirectToAction(nameof(Index));
 
         }

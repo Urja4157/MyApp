@@ -65,12 +65,15 @@ namespace MyAppWeb.Areas.Customer.Controllers
             if (cartItem == null)
             {
                     _unitOfWork.Cart.Add(cart);
+                    _unitOfWork.Save();
+                    HttpContext.Session.SetInt32("SessionCart",_unitOfWork.Cart.GetAll(X=>X.ApplicationUserId==claims.Value).ToList().Count);
                 }
                 else
                 {
                     _unitOfWork.Cart.IncrementCartItem(cartItem, cart.Count);
-                }
                     _unitOfWork.Save();
+
+                }
 
 
 
