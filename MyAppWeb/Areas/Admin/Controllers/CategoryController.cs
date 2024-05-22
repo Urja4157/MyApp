@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MyApp.CommonHelper;
 using MyApp.DataAccessLayer;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
@@ -7,6 +9,7 @@ using MyApp.Models.ViewModels;
 namespace MyAppWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles =WebSiteRole.Role_Admin)]
     public class CategoryController : Controller
     {
         private IUnitOfWork _unitOfWork;

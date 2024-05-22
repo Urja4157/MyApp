@@ -227,28 +227,37 @@
                         <p>Order Total: $<span id="orderTotal">100.00</span></p>
                         <p>Status: <span id="orderStatus">Pending</span></p>
                     </div>*@
-                <div>
-                    @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+            <div>
+                @if (User.IsInRole(WebSiteRole.Role_Admin) || User.IsInRole(WebSiteRole.Role_Employee))
+                {
+                    if (Model.OrderHeader.OrderStatus == OrderStatus.StatusApproved)
                     {
-                        if (Model.OrderHeader.OrderStatus == OrderStatus.StatusApproved)
-                        {
-                            <button asp-action="InProcess" type="submit" class="form-control" style="background-color: #008CBA">Start Processing</button><br />
-
-                        }
-                        if (Model.OrderHeader.OrderStatus == OrderStatus.StatusInProcess)
-                        {
-                            <button asp-action="Shipped" type="submit" class="form-control" onclick="return ValidateEmpty()" style="background-color: #4CAF50">Ship Order</button><br />
-
-
-                        }
-                        if (Model.OrderHeader.OrderStatus != OrderStatus.StatusRefund && Model.OrderHeader.OrderStatus != OrderStatus.StatusCancelled)
-                        {
-                            <button asp-action="CancelOrder" type="submit" class="form-control" style="background-color: #f44336">Cancel Order</button>
-
-                        }
+                        <button asp-action="InProcess" type="submit" class="form-control" style="background-color: #008CBA">Start Processing</button><br />
 
                     }
-                </div>
+                    if (Model.OrderHeader.OrderStatus == OrderStatus.StatusInProcess)
+                    {
+                        <button asp-action="Shipped" type="submit" class="form-control" onclick="return ValidateEmpty()" style="background-color: #4CAF50">Ship Order</button><br />
+
+
+                    }
+                    if (Model.OrderHeader.OrderStatus != OrderStatus.StatusRefund && Model.OrderHeader.OrderStatus != OrderStatus.StatusCancelled)
+                    {
+                        <button asp-action="CancelOrder" type="submit" class="form-control" style="background-color: #f44336">Cancel Order</button>
+
+                    }
+                }
+                else
+                {
+                        @if (User.IsInRole(WebSiteRole.Role_User) && Model.OrderHeader.OrderStatus == OrderStatus.StatusPending)
+                        {
+                            <button asp-action="PayNow" type="submit" class="btn btn-success btn-lg"  style="background-color: #f44336">Pay Now</button>
+
+                        }
+                }
+
+
+            </div>
                
                 <a asp-action="Index" asp-controller="product">Back to List</a>
             </div>

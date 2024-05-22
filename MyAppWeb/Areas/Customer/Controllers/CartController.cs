@@ -137,15 +137,15 @@ namespace MyAppWeb.Areas.Customer.Controllers
             _unitOfWork.OrderHeader.PaymentStatus(vm.OrderHeader.Id, session.Id, session.PaymentIntentId);
             _unitOfWork.Save();
 
-
+            _unitOfWork.Cart.DeleteRange(vm.ListOfCart);
+            _unitOfWork.Save();
 
 
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
 
 
-            _unitOfWork.Cart.DeleteRange(vm.ListOfCart);
-            _unitOfWork.Save();
+            
             return RedirectToAction("Index","Home");
 
         }

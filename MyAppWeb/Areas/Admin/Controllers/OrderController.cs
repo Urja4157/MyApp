@@ -5,12 +5,14 @@ using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
 using MyApp.Models.ViewModels;
 using Stripe;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace MyAppWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize]
+
     public class OrderController : Controller
     {
 
@@ -65,10 +67,12 @@ namespace MyAppWeb.Areas.Admin.Controllers
             OrderVM orderVM = new OrderVM()
             {
                 OrderHeader = _unitOfWork.OrderHeader.GetT(x => x.Id == id, includeProperties: "ApplicationUser"),
-                OrderDetail = _unitOfWork.OrderDetail.GetAll(x => x.Id == id, includeProperties: "Product")
+                OrderDetail = _unitOfWork.OrderDetail.GetAll(x => x.OrderHeaderId == id, includeProperties: "Product")
             };
             return View(orderVM); 
         }
+
+        [Authorize(Roles = WebSiteRole.Role_Admin + "," + WebSiteRole.Role_Employee)]
         [HttpPost]
         public IActionResult OrderDetails(OrderVM vm) 
         {
@@ -92,8 +96,9 @@ namespace MyAppWeb.Areas.Admin.Controllers
             TempData["success"] = "Info Updated";
             return RedirectToAction("OrderDetails", "Order", new { id = vm.OrderHeader.Id });
      
-        } 
-        
+        }
+
+        [Authorize(Roles = WebSiteRole.Role_Admin + "," + WebSiteRole.Role_Employee)]
         public IActionResult InProcess(OrderVM vm) 
         {
           
@@ -103,7 +108,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
             return RedirectToAction("OrderDetails", "Order", new { id = vm.OrderHeader.Id });
      
         } 
-        
+        [Authorize(Roles = WebSiteRole.Role_Admin + "," + WebSiteRole.Role_Employee)]
         public IActionResult Shipped(OrderVM vm) 
         {
             var orderHeader = _unitOfWork.OrderHeader.GetT(x => x.Id == vm.OrderHeader.Id);
@@ -118,6 +123,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
             return RedirectToAction("OrderDetails", "Order", new { id = vm.OrderHeader.Id });
      
         }
+        [Authorize(Roles = WebSiteRole.Role_Admin + "," + WebSiteRole.Role_Employee)]
         public IActionResult CancelOrder(OrderVM vm) 
         {   
             var orderHeader = _unitOfWork.OrderHeader.GetT(x => x.Id == vm.OrderHeader.Id);
@@ -141,5 +147,47 @@ namespace MyAppWeb.Areas.Admin.Controllers
             return RedirectToAction("OrderDetails", "Order", new { id = vm.OrderHeader.Id });
      
         }
+        public IActionResult PayNow(OrderVM vm)
+        {
+            var OrderHeader = _unitOfWork.OrderHeader.GetT(x => x.Id == vm.OrderHeader.Id, includeProperties: "ApplicationUser");
+            var OrderDetail = _unitOfWork.OrderDetail.GetAll(x => x.OrderHeaderId == vm.OrderHeader.Id, includeProperties: "Product");
+
+            var domain = "https://localhost:7212/";
+
+            var options = new SessionCreateOptions
+            {
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+                SuccessUrl = domain + $"customer/cart/ordersuccess?id={vm.OrderHeader.Id}",
+                CancelUrl = domain + $"customer/cart/Index",
+            };
+
+            foreach (var item in OrderDetail)
+            {
+
+                var lineItemsOptions = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(item.Product.Price * 100),
+                        Currency = "inr",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Product.Name,
+                        },
+                    },
+                    Quantity = item.Count,
+                };
+                options.LineItems.Add(lineItemsOptions);
+            }
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+            _unitOfWork.OrderHeader.PaymentStatus(vm.OrderHeader.Id, session.Id, session.PaymentIntentId);
+            _unitOfWork.Save();
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
+            return RedirectToAction("Index", "Home");
+        }       
     }
 }
