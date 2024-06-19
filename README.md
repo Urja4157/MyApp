@@ -23,3 +23,4 @@ A shopping cart application built with ASP.NET MVC 6. It includes user authentic
 - Developed a comprehensive shopping cart and checkout process.
 - Integrated payment gateways for seamless transactions. (Stripe)
 - Created an admin panel for efficient management of products and orders.
+- Utilized the repository pattern to promote clean architecture and maintainability.
